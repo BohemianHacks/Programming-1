@@ -15,14 +15,14 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 	        return size * nmemb;
 }
 
-bool getPage(const char *url, string *readBuffer){
+bool getPage(const char* url, string& readBuffer){
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
 	if(curl){ 
 		curl_easy_setopt(curl, CURLOPT_URL, url);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, readBuffer);
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 		res = curl_easy_perform(curl);
 		if(res != CURLE_OK){
 			fprintf(stderr,"Failed: %s\n",curl_easy_strerror(res));
@@ -33,13 +33,12 @@ bool getPage(const char *url, string *readBuffer){
 	curl_easy_cleanup(curl);
 }
 
-double getPrice(string *symbol, string *type){
+double getPrice(string& symbol, string& type){
 	stringstream urlBuilder;
 	string response;
-	double price;
-	urlBuilder << "http://download.finance.yahoo.com/d/quotes.csv?s=" << *symbol << "&f=" << *type;
-	getPage(urlBuilder.str().c_str(),&response);
-	price = atof(response.c_str());
+	urlBuilder << "http://download.finance.yahoo.com/d/quotes.csv?s=" << symbol << "&f=" << type;
+	getPage(urlBuilder.str().c_str(),response);
+	double price = atof(response.c_str());
 	return price;
 }
 int main(int argc, char *argv[]){
@@ -79,7 +78,7 @@ int main(int argc, char *argv[]){
 	}
 	string type = "l1";
 	for (int i = 0; i < 20; i++){
-		double price = getPrice(&stocks[i], &type);
+		double price = getPrice(stocks[i], type);
 		if (price > 0){
 			cout << stocks[i] << " " << price << endl;
 		}
