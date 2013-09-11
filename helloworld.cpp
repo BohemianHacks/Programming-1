@@ -2,6 +2,7 @@
 //Built to introduce me to C++
 //by Jeff Blecha
 
+#include "stdafx.h"
 #include <iostream>
 #include <string>
 
