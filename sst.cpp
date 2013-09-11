@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vector>
 #include <string>
 #include <string.h>
 #include "stdafx.h"
@@ -37,14 +38,15 @@ double getPrice(string& symbol, string& type){
 	stringstream urlBuilder;
 	string response;
 	urlBuilder << "http://download.finance.yahoo.com/d/quotes.csv?s=" << symbol << "&f=" << type;
-	getPage(urlBuilder.str().c_str(),response);
-	double price = atof(response.c_str());
-	return price;
+	if (getPage(urlBuilder.str().c_str(),response)){
+		return atof(response.c_str());
+	}
+	return 0.0;
 }
 int main(int argc, char *argv[]){
 	bool color = false;
 	int interval = 30;
-	string stocks[20];
+	vector<string> stocks;
 	ifstream list;
 	if (argc<2){
 		cout << "Usage: sst [options] <stock list>" << endl;
@@ -61,8 +63,9 @@ int main(int argc, char *argv[]){
 				list.open(argv[i]);
 				if (list.is_open()){
 					int j = 0;
-					while (!list.eof()){
-						getline(list,stocks[j++]);
+					string sym;
+					while (list >> sym){
+						stocks.push_back(sym);
 					}
 				}
 				else{
@@ -77,9 +80,9 @@ int main(int argc, char *argv[]){
 		}
 	}
 	string type = "l1";
-	for (int i = 0; i < 20; i++){
+	for (int i = 0; i < stocks.size(); i++){
 		double price = getPrice(stocks[i], type);
-		if (price > 0){
+		if (price > 0.0){
 			cout << stocks[i] << " " << price << endl;
 		}
 		else if (stocks[i].length() < 1)
