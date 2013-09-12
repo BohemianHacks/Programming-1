@@ -19,7 +19,7 @@ static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *use
 }
 
 //scrape basic html or text based on curl example code
-bool getPage(const char* url, string& readBuffer){
+bool getPage(const char* url, const string& readBuffer){
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
@@ -38,24 +38,30 @@ bool getPage(const char* url, string& readBuffer){
 }
 
 //gets csv data from yahoo finance and returns as a double
-double getPrice(string& symbol, string type){
+double getPrice(const string& symbol, const string type){
 	stringstream urlBuilder;
 	string response;
 	urlBuilder << "http://download.finance.yahoo.com/d/quotes.csv?s=" << symbol << "&f=" << type;
 	if (getPage(urlBuilder.str().c_str(),response)){
 		return atof(response.c_str());
 	}
-	return 0.0;
+	return -1.0;
 }
 
 //start of stock class to hold all the data and compute technicals
 class stock {
-	public:
+	private:
 		double open; //opening price
 		double close; //previous closing price
 		double current; //current price
 		double change; //percent change from previous close
 		string symbol; //stock ticker symbol
+	public:
+		double getOpen(){return open;};
+		double getClose(){return close;};
+		double getCurrent(){return current;};
+		double getChange(){return change;};
+		string getSymbol(){return symbol;};
 		stock(string sym);
 		void update(void);
 		void getEma(int days);
@@ -70,15 +76,6 @@ stock::stock(string sym){
 	change = 100.0*(current-close)/current;
 }
 
-//unused function for later use
-void stock::update(void){
-	open = getPrice(symbol,"o");
-	close = getPrice(symbol,"p");
-	current = getPrice(symbol,"l1");
-	change = 100.0*(current-close)/current;
-}
-
-	
 
 int main(int argc, char *argv[]){
 	// color  and updated inteveral is yet to be implemented
@@ -137,7 +134,7 @@ int main(int argc, char *argv[]){
 	//a good cross platform for unbuffered keyboard input is hard to find.
 	cout <<  "Symbol Current  %Change" << endl;
 	for (int s = 0;s < stockV.size();s++){
-		cout << setw(5) << stockV[s].symbol << ": " << setw(7) <<setprecision(3) << stockV[s].current << " " << setw(7) << setprecision(2) << stockV[s].change << "%"  << endl;
+		cout << setw(5) << stockV[s].getSymbol() << ": " << setw(7) <<setprecision(5) << stockV[s].getCurrent() << " " << setw(7) << setprecision(2) << stockV[s].getChange() << "%"  << endl;
 		}
 		cin.ignore();	
 	return 0;
