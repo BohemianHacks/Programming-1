@@ -89,6 +89,7 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 	else if (argc>=2){
+		vector<string> stocks;
 		for (int i=1; i<argc; i++){
 			//look for flags or filename to load
 			if (strstr(argv[i],"-") != NULL){
@@ -104,7 +105,6 @@ int main(int argc, char *argv[]){
 					//some variables to load the stock symbol vector
 					int j = 0;
 					string sym;
-					vector<string> stocks;
 					while (list >> sym){
 						stocks.push_back(sym);
 					}
