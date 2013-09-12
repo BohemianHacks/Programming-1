@@ -68,7 +68,7 @@ class stock {
 };
 
 //basic constructor to properly initialize variables
-stock::stock(string sym){
+stock::stock(const string sym){
 	symbol = sym;
 	open = getPrice(symbol,"o");
 	close = getPrice(symbol,"p");
