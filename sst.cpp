@@ -10,12 +10,14 @@
 
 using namespace std;
 
+//callback I found online for curl that sends a string of webdata
 static size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp)
 {
 	    ((string*)userp)->append((char*)contents, size * nmemb);
 	        return size * nmemb;
 }
 
+//scrape basic html or text based on curl example code
 bool getPage(const char* url, string& readBuffer){
 	CURL *curl;
 	CURLcode res;
@@ -34,6 +36,7 @@ bool getPage(const char* url, string& readBuffer){
 	curl_easy_cleanup(curl);
 }
 
+//gets csv data from yahoo finance and returns as a double
 double getPrice(string& symbol, string type){
 	stringstream urlBuilder;
 	string response;
@@ -44,6 +47,7 @@ double getPrice(string& symbol, string type){
 	return 0.0;
 }
 
+//start of stock class to hold all the data and compute technicals
 class stock {
 	public:
 		double open; //opening price
@@ -56,6 +60,7 @@ class stock {
 		void getEma(int days);
 };
 
+//basic constructor to properly initialize variables
 stock::stock(string sym){
 	symbol = sym;
 	open = getPrice(symbol,"o");
@@ -64,6 +69,7 @@ stock::stock(string sym){
 	change = 100.0*(current-close)/current;
 }
 
+//unused function for later use
 void stock::update(void){
 	open = getPrice(symbol,"o");
 	close = getPrice(symbol,"p");
@@ -74,26 +80,30 @@ void stock::update(void){
 	
 
 int main(int argc, char *argv[]){
+	// color  and updated inteveral is yet to be implemented
 	bool color = false;
 	int interval = 30;
-	vector<string> stocks;
-	ifstream list;
 	if (argc<2){
 		cout << "Usage: sst [options] <stock list>" << endl;
 		return 0;
 	}
 	else if (argc>=2){
 		for (int i=1; i<argc; i++){
+			//look for flags or filename to load
 			if (strstr(argv[i],"-") != NULL){
 				if (strcmp(argv[i],"-c")==0){
 					color = true;
 					}
 			}
 			else{
+				//lack of tack assumed to be filename
+				ifstream list;
 				list.open(argv[i]);
 				if (list.is_open()){
+					//some variables to load the stock symbol vector
 					int j = 0;
 					string sym;
+					vector<string> stocks;
 					while (list >> sym){
 						stocks.push_back(sym);
 					}
@@ -109,21 +119,23 @@ int main(int argc, char *argv[]){
 			return 0;
 		}
 	}
+	//vector to hold stock objects
 	vector<stock> stockV;
 	for (int i = 0; i < stocks.size(); i++){
 		double price = getPrice(stocks[i], "l1");
+		//check for a valid price before loading stock
 		if (price > 0.0){
 			stock s(stocks[i]);
 			stockV.push_back(s);
 		}
+		//stop looking for stocks after a blank line
 		else if (stocks[i].length() < 1)
 			break;
 	}
-	vector<string> screen;
-	stringstream line;
+	//I would like to loop here and update after interval seconds.
+	//a good cross platform for unbuffered keyboard input is hard to find.
 	for (int s = 0;s < stockV.size();s++){
 		cout << stockV[s].symbol << ": " << stockV[s].current << " %" << stockV[s].change << endl;
-		screen.push_back(line.str());
 		}
 		cin.ignore();	
 	return 0;
