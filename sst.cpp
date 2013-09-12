@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <string.h>
+#include <time.h>
 #include "stdafx.h"
 #include <stdlib.h>
 #include <curl/curl.h>
@@ -43,6 +44,44 @@ double getPrice(string& symbol, string& type){
 	}
 	return 0.0;
 }
+
+class stock {
+	public:
+		double open; //opening price
+		double close; //previous closing price
+		double current; //current price
+		double change; //percent change from previous close
+		string symbol; //stock ticker symbol
+		stock(string sym);
+		void update(void);
+		void getEma(int days);
+};
+
+stock::stock(string sym){
+	symbol = sym;
+	string type = "o";
+	open = getPrice(symbol,type);
+	type = "p";
+	close = getPrice(symbol,type);
+	type = "l1";
+	current = getPrice(symbol,type);
+	change = 100.0*(current-close)/current;
+	type.clear();
+}
+
+void stock::update(void){
+	string type = "o";
+	open = getPrice(symbol,type);
+	type = "p";
+	close = getPrice(symbol,type);
+	type = "l1";
+	current = getPrice(symbol,type); 
+	change = 100.0*(current-close)/current;
+	type.clear();
+}
+
+	
+
 int main(int argc, char *argv[]){
 	bool color = false;
 	int interval = 30;
@@ -79,14 +118,24 @@ int main(int argc, char *argv[]){
 			return 0;
 		}
 	}
+	vector<stock> stockV;
 	string type = "l1";
 	for (int i = 0; i < stocks.size(); i++){
 		double price = getPrice(stocks[i], type);
 		if (price > 0.0){
-			cout << stocks[i] << " " << price << endl;
+			stock s(stocks[i]);
+			stockV.push_back(s);
 		}
 		else if (stocks[i].length() < 1)
 			break;
 	}
+	type.clear();
+	vector<string> screen;
+	stringstream line;
+	for (int s = 0;s < stockV.size();s++){
+		cout << stockV[s].symbol << ": " << stockV[s].current << " %" << stockV[s].change << endl;
+		screen.push_back(line.str());
+		}
+		cin.ignore();	
 	return 0;
 }
