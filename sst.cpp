@@ -35,7 +35,7 @@ bool getPage(const char* url, string& readBuffer){
 	curl_easy_cleanup(curl);
 }
 
-double getPrice(string& symbol, string& type){
+double getPrice(string& symbol, string type){
 	stringstream urlBuilder;
 	string response;
 	urlBuilder << "http://download.finance.yahoo.com/d/quotes.csv?s=" << symbol << "&f=" << type;
@@ -59,25 +59,17 @@ class stock {
 
 stock::stock(string sym){
 	symbol = sym;
-	string type = "o";
-	open = getPrice(symbol,type);
-	type = "p";
-	close = getPrice(symbol,type);
-	type = "l1";
-	current = getPrice(symbol,type);
+	open = getPrice(symbol,"o");
+	close = getPrice(symbol,"p");
+	current = getPrice(symbol,"l1");
 	change = 100.0*(current-close)/current;
-	type.clear();
 }
 
 void stock::update(void){
-	string type = "o";
-	open = getPrice(symbol,type);
-	type = "p";
-	close = getPrice(symbol,type);
-	type = "l1";
-	current = getPrice(symbol,type); 
+	open = getPrice(symbol,"o");
+	close = getPrice(symbol,"p");
+	current = getPrice(symbol,"l1");
 	change = 100.0*(current-close)/current;
-	type.clear();
 }
 
 	
@@ -119,9 +111,8 @@ int main(int argc, char *argv[]){
 		}
 	}
 	vector<stock> stockV;
-	string type = "l1";
 	for (int i = 0; i < stocks.size(); i++){
-		double price = getPrice(stocks[i], type);
+		double price = getPrice(stocks[i], "l1");
 		if (price > 0.0){
 			stock s(stocks[i]);
 			stockV.push_back(s);
@@ -129,7 +120,6 @@ int main(int argc, char *argv[]){
 		else if (stocks[i].length() < 1)
 			break;
 	}
-	type.clear();
 	vector<string> screen;
 	stringstream line;
 	for (int s = 0;s < stockV.size();s++){
