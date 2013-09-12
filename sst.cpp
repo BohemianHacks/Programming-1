@@ -136,7 +136,7 @@ int main(int argc, char *argv[]){
 	//I would like to loop here and update after interval seconds.
 	//a good cross platform for unbuffered keyboard input is hard to find.
 	for (int s = 0;s < stockV.size();s++){
-		cout << setw(5) << stockV[s].symbol << ": " << setw(6) << stockV[s].current << " %" << setw(6) << setprecision(2) << stockV[s].change << endl;
+		cout << setw(5) << stockV[s].symbol << ": " << setw(6) <<setprecision(2) << stockV[s].current << " %" << setw(6) << setprecision(2) << stockV[s].change << endl;
 		}
 		cin.ignore();	
 	return 0;
