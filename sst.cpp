@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include <string.h>
-#include <time.h>
 #include "stdafx.h"
 #include <stdlib.h>
 #include <curl/curl.h>
