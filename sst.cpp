@@ -84,12 +84,12 @@ int main(int argc, char *argv[]){
 	// color  and updated inteveral is yet to be implemented
 	bool color = false;
 	int interval = 30;
+	vector<string> stocks;
 	if (argc<2){
 		cout << "Usage: sst [options] <stock list>" << endl;
 		return 0;
 	}
 	else if (argc>=2){
-		vector<string> stocks;
 		for (int i=1; i<argc; i++){
 			//look for flags or filename to load
 			if (strstr(argv[i],"-") != NULL){
