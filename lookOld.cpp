@@ -1,3 +1,9 @@
+//Program to find age in months
+//Jeff Blecha 9-16-2013
+
+
+#include <string>
+#include <iomanip>
 #include <iostream>
 #include "stdafx.h"
 
