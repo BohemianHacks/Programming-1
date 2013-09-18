@@ -25,4 +25,7 @@ int main (){
 
     //display results
     cout << "Area:" << area << endl;
+
+    //return 0
+    return (0);
 }
