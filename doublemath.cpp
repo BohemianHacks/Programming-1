@@ -23,8 +23,6 @@ int main(){
     cout << double1 << " * " << double2 << " = " << double1 * double2 << endl;
     cout << double1 << " / " << double2 << " = " << double1 / double2 << endl;
     cout << double2 << " / " << double1 << " = " << double2 / double1 << endl;
-    cout << double1 << " % " << double2 << " = " << double1 % double2 << endl;
-    cout << double2 << " % " << double1 << " = " << double2 % double1 << endl;
 
     //return 0
     return(0);
