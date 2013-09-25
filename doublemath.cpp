@@ -6,25 +6,25 @@ using namespace std;
 
 int main(){
     //create variables
-    int integer1;
-    int integer2;
+    double double1;
+    double double2;
 
     //get input
     cout << "Enter the first number ";
-    cin >> integer1;
+    cin >> double1;
     cout << "Enter the second number ";
-    cin >> integer2;
+    cin >> double2;
 
     //display results
     cout << "IntMath ---" << endl;
-    cout << integer1 << " + " << integer2 << " = " << integer1 + integer2 << endl;
-    cout << integer1 << " - " << integer2 << " = " << integer1 - integer2 << endl;
-    cout << integer2 << " - " << integer1 << " = " << integer2 - integer1 << endl;
-    cout << integer1 << " * " << integer2 << " = " << integer1 * integer2 << endl;
-    cout << integer1 << " / " << integer2 << " = " << integer1 / integer2 << endl;
-    cout << integer2 << " / " << integer1 << " = " << integer2 / integer1 << endl;
-    cout << integer1 << " % " << integer2 << " = " << integer1 % integer2 << endl;
-    cout << integer2 << " % " << integer1 << " = " << integer2 % integer1 << endl;
+    cout << double1 << " + " << double2 << " = " << double1 + double2 << endl;
+    cout << double1 << " - " << double2 << " = " << double1 - double2 << endl;
+    cout << double2 << " - " << double1 << " = " << double2 - double1 << endl;
+    cout << double1 << " * " << double2 << " = " << double1 * double2 << endl;
+    cout << double1 << " / " << double2 << " = " << double1 / double2 << endl;
+    cout << double2 << " / " << double1 << " = " << double2 / double1 << endl;
+    cout << double1 << " % " << double2 << " = " << double1 % double2 << endl;
+    cout << double2 << " % " << double1 << " = " << double2 % double1 << endl;
 
     //return 0
     return(0);
